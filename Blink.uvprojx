@@ -17,7 +17,7 @@
         <TargetCommonOption>
           <Device>STM32F407VETx</Device>
           <Vendor>STMicroelectronics</Vendor>
-          <PackID>Keil.STM32F4xx_DFP.2.15.0</PackID>
+          <PackID>Keil.STM32F4xx_DFP.2.16.0</PackID>
           <PackURL>http://www.keil.com/pack/</PackURL>
           <Cpu>IRAM(0x20000000,0x00020000) IRAM2(0x10000000,0x00010000) IROM(0x08000000,0x00080000) CPUTYPE("Cortex-M4") FPU2 CLOCK(12000000) ELITTLE</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
@@ -394,11 +394,6 @@
               <FileType>1</FileType>
               <FilePath>.\src\board_STM32F407VET6.c</FilePath>
             </File>
-            <File>
-              <FileName>blink.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\src\blink.c</FilePath>
-            </File>
           </Files>
         </Group>
         <Group>
@@ -408,196 +403,6 @@
               <FileName>board_STM32F407VET6.h</FileName>
               <FileType>5</FileType>
               <FilePath>.\inc\board_STM32F407VET6.h</FilePath>
-            </File>
-            <File>
-              <FileName>blink.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\inc\blink.h</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>qpc\platform\inc</GroupName>
-          <Files>
-            <File>
-              <FileName>qassert.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\qpc\platform\inc\qassert.h</FilePath>
-            </File>
-            <File>
-              <FileName>qep.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\qpc\platform\inc\qep.h</FilePath>
-            </File>
-            <File>
-              <FileName>qequeue.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\qpc\platform\inc\qequeue.h</FilePath>
-            </File>
-            <File>
-              <FileName>qf.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\qpc\platform\inc\qf.h</FilePath>
-            </File>
-            <File>
-              <FileName>qf_pkg.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\qpc\platform\inc\qf_pkg.h</FilePath>
-            </File>
-            <File>
-              <FileName>qmpool.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\qpc\platform\inc\qmpool.h</FilePath>
-            </File>
-            <File>
-              <FileName>qpc.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\qpc\platform\inc\qpc.h</FilePath>
-            </File>
-            <File>
-              <FileName>qpset.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\qpc\platform\inc\qpset.h</FilePath>
-            </File>
-            <File>
-              <FileName>qs_dummy.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\qpc\platform\inc\qs_dummy.h</FilePath>
-            </File>
-            <File>
-              <FileName>qxk.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\qpc\platform\inc\qxk.h</FilePath>
-            </File>
-            <File>
-              <FileName>qxk_pkg.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\qpc\platform\inc\qxk_pkg.h</FilePath>
-            </File>
-            <File>
-              <FileName>qxthread.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\qpc\platform\inc\qxthread.h</FilePath>
-            </File>
-            <File>
-              <FileName>stdint_c.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\qpc\platform\inc\stdint_c.h</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>qpc\port\src</GroupName>
-          <Files>
-            <File>
-              <FileName>qxk_port.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\qpc\port\src\qxk_port.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>qpc\platform\src</GroupName>
-          <Files>
-            <File>
-              <FileName>qep_hsm.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\qpc\platform\src\qep_hsm.c</FilePath>
-            </File>
-            <File>
-              <FileName>qep_msm.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\qpc\platform\src\qep_msm.c</FilePath>
-            </File>
-            <File>
-              <FileName>qf_act.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\qpc\platform\src\qf_act.c</FilePath>
-            </File>
-            <File>
-              <FileName>qf_actq.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\qpc\platform\src\qf_actq.c</FilePath>
-            </File>
-            <File>
-              <FileName>qf_defer.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\qpc\platform\src\qf_defer.c</FilePath>
-            </File>
-            <File>
-              <FileName>qf_dyn.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\qpc\platform\src\qf_dyn.c</FilePath>
-            </File>
-            <File>
-              <FileName>qf_mem.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\qpc\platform\src\qf_mem.c</FilePath>
-            </File>
-            <File>
-              <FileName>qf_ps.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\qpc\platform\src\qf_ps.c</FilePath>
-            </File>
-            <File>
-              <FileName>qf_qact.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\qpc\platform\src\qf_qact.c</FilePath>
-            </File>
-            <File>
-              <FileName>qf_qeq.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\qpc\platform\src\qf_qeq.c</FilePath>
-            </File>
-            <File>
-              <FileName>qf_qmact.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\qpc\platform\src\qf_qmact.c</FilePath>
-            </File>
-            <File>
-              <FileName>qf_time.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\qpc\platform\src\qf_time.c</FilePath>
-            </File>
-            <File>
-              <FileName>qxk.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\qpc\platform\src\qxk.c</FilePath>
-            </File>
-            <File>
-              <FileName>qxk_mutex.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\qpc\platform\src\qxk_mutex.c</FilePath>
-            </File>
-            <File>
-              <FileName>qxk_sema.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\qpc\platform\src\qxk_sema.c</FilePath>
-            </File>
-            <File>
-              <FileName>qxk_xthr.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\qpc\platform\src\qxk_xthr.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>qpc\port\inc</GroupName>
-          <Files>
-            <File>
-              <FileName>qep_port.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\qpc\port\inc\qep_port.h</FilePath>
-            </File>
-            <File>
-              <FileName>qf_port.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\qpc\port\inc\qf_port.h</FilePath>
-            </File>
-            <File>
-              <FileName>qxk_port.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\qpc\port\inc\qxk_port.h</FilePath>
             </File>
           </Files>
         </Group>
@@ -649,7 +454,7 @@
       <file attr="config" category="source" condition="STM32F407xx_ARMCC" name="Drivers\CMSIS\Device\ST\STM32F4xx\Source\Templates\arm\startup_stm32f407xx.s" version="2.6.2">
         <instance index="0">RTE\Device\STM32F407VETx\startup_stm32f407xx.s</instance>
         <component Cclass="Device" Cgroup="Startup" Cvendor="Keil" Cversion="2.6.3" condition="STM32F4 CMSIS"/>
-        <package name="STM32F4xx_DFP" schemaVersion="1.6.3" url="http://www.keil.com/pack/" vendor="Keil" version="2.15.0"/>
+        <package name="STM32F4xx_DFP" schemaVersion="1.7.2" url="http://www.keil.com/pack/" vendor="Keil" version="2.16.0"/>
         <targetInfos>
           <targetInfo name="Blynk"/>
         </targetInfos>
@@ -657,7 +462,7 @@
       <file attr="config" category="source" name="Drivers\CMSIS\Device\ST\STM32F4xx\Source\Templates\system_stm32f4xx.c" version="2.6.3">
         <instance index="0">RTE\Device\STM32F407VETx\system_stm32f4xx.c</instance>
         <component Cclass="Device" Cgroup="Startup" Cvendor="Keil" Cversion="2.6.3" condition="STM32F4 CMSIS"/>
-        <package name="STM32F4xx_DFP" schemaVersion="1.6.3" url="http://www.keil.com/pack/" vendor="Keil" version="2.15.0"/>
+        <package name="STM32F4xx_DFP" schemaVersion="1.7.2" url="http://www.keil.com/pack/" vendor="Keil" version="2.16.0"/>
         <targetInfos>
           <targetInfo name="Blynk"/>
         </targetInfos>

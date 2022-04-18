@@ -1,35 +1,33 @@
 /*****************************************************************************
-*    My qpc Blink ver_1
+*    My Blynk ver_1.0.0
 *    Project for CPU stm32f407VET6
 *    
 *****************************************************************************/
 
-
-#include "qpc.h"
 #include <stdio.h>  /* for printf()/fprintf() */
 #include <stdlib.h> /* for exit() */
 #include "board_STM32F407VET6.h"
+#define DELAY_T 1000000L // delay time
 
+void delay_for (int);
 
 int main() {
-    QF_init();    /* initialize the framework */
-    
-    return QF_run(); /* let the framework run the application */
+    qp_blink_turn_off();
+    //    /* main loop */
+    while (1){
+    qp_blink_turn_on();
+    delay_for (DELAY_T);    
+    qp_blink_turn_off();
+    delay_for (DELAY_T); 
+    }
+    return 0;
 }
 
-void Q_onAssert(char const * const module, int loc) {
-    fprintf(stderr, "Assertion failed in %s:%d", module, loc);
-    exit(-1);
+void delay_for (int delay_t){
+    int counter=0;
+    int i=0;
+    for (i=0; i<delay_t; i++ ){
+        counter += i; // work 
+    }
 }
 
-void QF_onCleanup(void) {
-    // do nothing
-}
-
-void QF_onStartup(void) {
-  board_init(); /* initialize the BSP */
-}
-
-void QXK_onIdle(void) {
-  
-}
