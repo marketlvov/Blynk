@@ -12,7 +12,9 @@
 void delay_for (int);
 
 int main() {
+    board_init();
     qp_blink_turn_off();
+    
     //    /* main loop */
     while (1){
     qp_blink_turn_on();
