@@ -56,3 +56,7 @@ Objects/
 *.ivanovych
 *.scvd
 
+JLinkLog.txt
+
+**/*.hex
+
