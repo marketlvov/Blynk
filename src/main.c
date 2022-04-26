@@ -1,35 +1,53 @@
 /*****************************************************************************
-*    My Blynk ver_1.0.0
+*    My qpc Blink ver_1
 *    Project for CPU stm32f407VET6
 *    
 *****************************************************************************/
-
+//#include "qs_dummy.h"
 #include <stdio.h>  /* for printf()/fprintf() */
 #include <stdlib.h> /* for exit() */
+#include "qpc.h"
 #include "board_STM32F407VET6.h"
-#define DELAY_T 1000000L // delay time
+#include "blink.h"
 
-void delay_for (int);
+Q_DEFINE_THIS_FILE
 
 int main() {
+    static QEvt const *blink_queueSto[10];
+
     board_init();
-    qp_blink_turn_off();
-    
-    //    /* main loop */
-    while (1){
-    qp_blink_turn_on();
-    delay_for (DELAY_T);    
-    qp_blink_turn_off();
-    delay_for (DELAY_T); 
-    }
-    return 0;
+
+    QF_init();    /* initialize the framework */
+
+    Blink_ctor(); /* explicitly call the "constructor" */
+
+    QACTIVE_START(AO_Blink,
+                  1U, /* priority */
+                  blink_queueSto, Q_DIM(blink_queueSto),
+                  (void *)0, 0U, /* no stack */
+                  (QEvt *)0);    /* no initialization event */
+
+    control_led_on(); // test led
+
+    return QF_run(); /* let the framework run the application */
 }
 
-void delay_for (int delay_t){
-    int counter=0;
-    int i=0;
-    for (i=0; i<delay_t; i++ ){
-        counter += i; // work 
-    }
+
+
+
+void QF_onCleanup(void) {
+    // do nothing
 }
 
+void QF_onStartup(void) {
+    SysTick_init_Start();
+}
+
+void QXK_onIdle(void) {
+
+}
+
+void Q_onAssert(char const * const module, int loc) {
+    fprintf(stderr, "Assertion failed in %s:%d", module, loc);
+    exit(-1);
+}

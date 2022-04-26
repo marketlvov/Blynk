@@ -52,9 +52,11 @@ Mkfile.old
 dkms.conf
 
 # My ignore files
-Objects/
-**/*.ivanovych
-*.scvd
+/!
+/Objects
+/Listings
+/DebugConfig
 JLinkLog.txt
+*.scvd
+*.ivanovych
 **/*.hex
-
