@@ -13,10 +13,29 @@
 /* GPIO function implementation */ 
 void qp_blink_turn_on(void) {
     GPIOA->BSRR = GPIO_BSRR_BR_6;     // on  GPIOA pin6  D2 (gnd to port)
+
+    QS_BEGIN_ID(Blink_STAT, AO_Blink) /* application-specific record begin */
+        QS_FUN(&qp_blink_turn_on);   /* function called */
+        QS_U8(1,1);    /* application-specific data element (Philo number) */
+    QS_END()           /* application-specific record end */
 }
 
 void qp_blink_turn_off(void) {
     GPIOA->BSRR = GPIO_ODR_ODR_6;    // on  GPIOA pin6  D2 +U to port)
+
+    QS_BEGIN_ID(Blink_STAT, AO_Blink) /* application-specific record begin */
+        QS_FUN(&qp_blink_turn_off);   /* function called */
+        QS_U8(1,0);    /* application-specific data element (Philo number) */
+    QS_END()           /* application-specific record end */
+    
+//#ifdef Q_SPY
+// QS_BEGIN_ID( Blink_STAT, AO_Blink) /* application-specific record begin */
+// QS_FUN(&qp_blink_turn_off); /* function called */
+// QS_U8(1, e->sig);  /* application-specific data element (Philo number) */
+// QS_STR(1); /* application-specific data element (Philo status) */
+// QS_U32(0, 100);
+// QS_END()          /* application-specific record end */
+// #endif
 }
 
 void control_led_on(void) {
@@ -175,9 +194,9 @@ void USART1_init_Start(void){
         QS_USR_DICTIONARY(COMMAND_STAT);
 
         /* setup the QS filters... */
-        QS_GLB_FILTER(QS_SM_RECORDS); /* state machine records */
-        QS_GLB_FILTER(QS_AO_RECORDS); /* active object records */
-        QS_GLB_FILTER(QS_UA_RECORDS); /* all user records */
+        // QS_GLB_FILTER(QS_SM_RECORDS); /* state machine records */
+        // QS_GLB_FILTER(QS_AO_RECORDS); /* active object records */
+        // QS_GLB_FILTER(QS_UA_RECORDS); /* all user records */
     }
 
     void USART1_IRQHandler (void) {

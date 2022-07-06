@@ -11,7 +11,9 @@
 #include "stdint.h"
 #include "stm32f4xx.h"
 
+Q_DEFINE_THIS_FILE
 
+void Blink_DICTIONARY (void); // DICTIONARY
 
 #ifdef Q_SPY
     //usart 1 
@@ -21,7 +23,6 @@
     uint8_t usart_tx_data;
     uint8_t usart_rx_data;
 
-
     // UART1 Send Char -> uint8_t  
     void USART1_SendChar (uint8_t usart_c){
         USART1->DR = usart_c;              // LOad the Data for RX
@@ -29,8 +30,7 @@
         USART1->SR = ~USART_SR_TC;            // Clear flag USART_SR_TC end transmitt
     }
 
-
-        // UART1 Receive Char <- uint8_t
+    // UART1 Receive Char <- uint8_t
     uint8_t USART1_GetChar (void){
     //while ( !(USART1->SR & (1<<5)) ){} //wait RXNE bit to set
     if (USART1->SR & (1<<5)) {
@@ -48,31 +48,22 @@
     }
 #endif /* Q_SPY */
 
-
-Q_DEFINE_THIS_FILE
-
-
+    
 int main() {
     static QEvt const *blink_queueSto[10]; /* Event queue storage for Blink */
 
     board_init();
-    
-    
-    
-    #ifdef Q_SPY
+
+#ifdef Q_SPY
     QS_INIT(&QSUart); //QS_onStartup(void const *arg)
 
-    /* object dictionaries... */
-    //QS_OBJ_DICTIONARY(AO_Blink);
-     
-    /* global signals */
-    // QS_SIG_DICTIONARY(_SIG,      (void *)0); 
-    #endif /* Q_SPY */
+
+#endif /* Q_SPY */
 
 
-    QF_init();    /* initialize the framework */
-
-    Blink_ctor(); /* explicitly call the "constructor" */
+    QF_init();          /* initialize the framework */
+    Blink_DICTIONARY(); /* initialize Dictionary */
+    Blink_ctor();       /* explicitly call the "constructor" */
 
     QACTIVE_START(AO_Blink,
                   1U, /* priority */
@@ -81,6 +72,28 @@ int main() {
                   (QEvt *)0);    /* no initialization event */
     // USART1_SendChar (0x23);
     return QF_run(); /* let the framework run the application */
+}
+
+//DICTIONARY
+void Blink_DICTIONARY (void) {
+    
+    /* object dictionaries... */
+    QS_OBJ_DICTIONARY(AO_Blink);
+
+    /* global signals */
+    QS_SIG_DICTIONARY(TIMEOUT_SIG,(void *)0);
+    QS_SIG_DICTIONARY(Q_ENTRY_SIG,(void *)0);
+
+    /* functions dictionaries... */
+    QS_FUN_DICTIONARY(&control_led_on);
+    QS_FUN_DICTIONARY(&control_led_off);
+    QS_FUN_DICTIONARY(&qp_blink_turn_off);
+    QS_FUN_DICTIONARY(&qp_blink_turn_on);
+
+    //States
+    QS_FUN_DICTIONARY(&Blink_initial);
+    QS_FUN_DICTIONARY(&Blink_state_Led_Off);
+    QS_FUN_DICTIONARY(&Blink_state_Led_On);
 }
 
 
@@ -96,11 +109,8 @@ void QF_onStartup(void) {
 }
 
 
-
 void QXK_onIdle(void) {
     //usart_rx_data = USART1_GetChar();
-
-    
 #ifdef Q_SPY
     QS_rxParse();  /* parse all the received bytes */
 
@@ -192,7 +202,7 @@ void Q_onAssert(char const * const module, int loc) {
         //(void)param3;
         
         QS_BEGIN_ID(COMMAND_STAT, 0U) /* app-specific record */
-            QS_U8(2, cmdId);
+            QS_U8 (2, cmdId);
             QS_U32(8, param1);
             QS_U32(8, param2);
             QS_U32(8, param3);
