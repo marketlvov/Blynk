@@ -14,21 +14,23 @@
 
 
 #ifdef Q_SPY
-    //usart
+    //usart 1 
     #define QSUART 1
     uint8_t QSUart = QSUART;
 
     uint8_t usart_tx_data;
     uint8_t usart_rx_data;
 
-        // UART1 Send -> uint8_t  
+
+    // UART1 Send Char -> uint8_t  
     void USART1_SendChar (uint8_t usart_c){
         USART1->DR = usart_c;              // LOad the Data for RX
         while ( !(USART1->SR & USART_SR_TC) ){} //wait end of transmit sesion
         USART1->SR = ~USART_SR_TC;            // Clear flag USART_SR_TC end transmitt
     }
 
-        // UART1 Receive -> uint8_t
+
+        // UART1 Receive Char <- uint8_t
     uint8_t USART1_GetChar (void){
     //while ( !(USART1->SR & (1<<5)) ){} //wait RXNE bit to set
     if (USART1->SR & (1<<5)) {
@@ -68,8 +70,6 @@ int main() {
     #endif /* Q_SPY */
 
 
-
-
     QF_init();    /* initialize the framework */
 
     Blink_ctor(); /* explicitly call the "constructor" */
@@ -79,7 +79,7 @@ int main() {
                   blink_queueSto, Q_DIM(blink_queueSto),
                   (void *)0, 0U, /* no stack */
                   (QEvt *)0);    /* no initialization event */
-    //USART1_SendChar (0x23);
+    // USART1_SendChar (0x23);
     return QF_run(); /* let the framework run the application */
 }
 
@@ -135,7 +135,7 @@ void Q_onAssert(char const * const module, int loc) {
 
 /* QS callbacks ============================================================*/
 #ifdef Q_SPY
-        // QS_onStartup <==  QS_INIT(&QSUart); //QS_onStartup(void const *arg)
+    // QS_onStartup <==  QS_INIT(&QSUart); //QS_onStartup(void const *arg)
     uint8_t QS_onStartup(void const *arg) {
         static uint8_t qsBuf[2*1024]; /* buffer for QS-TX channel */
         static uint8_t qsRxBuf[100];  /* buffer for QS-RX channel */
@@ -167,7 +167,7 @@ void Q_onAssert(char const * const module, int loc) {
             QF_INT_ENABLE();
             while ( !(USART1->SR & USART_SR_TC) ) { /* while TXE not empty */
             }
-            USART2->DR = (b & 0xFFU); /* put into the DR register */
+            USART1->DR = (b & 0xFFU); /* put into the DR register */
             QF_INT_DISABLE();
         }
     QF_INT_ENABLE();
