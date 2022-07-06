@@ -26,12 +26,32 @@
 
 #include "qpc.h"
 
+extern void USART1_SendChar (uint8_t);
 
 /* define the event signals used in the application ------------------------*/
 enum BlinkSignals {
     TIMEOUT_SIG = Q_USER_SIG, /* offset the first signal by Q_USER_SIG */
     MAX_SIG /* keep last (the number of signals) */
 };
+
+
+
+
+#ifdef Q_SPY
+    static QSTimeCtr QS_tickTime_;
+    static QSTimeCtr QS_tickPeriod_;
+
+    /* event-source identifiers used for tracing */
+    static uint8_t const l_SysTick;
+
+    enum AppRecords { /* application-specific trace records */
+        Blink_STAT = QS_USER,
+        COMMAND_STAT
+    };
+#endif /* Q_SPY */
+
+
+
 
 
 enum { BSP_TICKS_PER_SEC = 100 }; /* number of clock ticks in a second */
