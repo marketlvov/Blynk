@@ -167,7 +167,7 @@ void Q_onAssert(char const * const module, int loc) {
             QF_INT_ENABLE();
             while ( !(USART1->SR & USART_SR_TC) ) { /* while TXE not empty */
             }
-            USART2->DR = (b & 0xFFU); /* put into the DR register */
+            USART1->DR = (b & 0xFFU); /* put into the DR register */
             QF_INT_DISABLE();
         }
     QF_INT_ENABLE();
