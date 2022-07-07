@@ -36,7 +36,6 @@ void QF_onClockTick(void) {
 static Blink l_blink;
 QActive * const AO_Blink = &l_blink.super;
 
-
 /*================ ask QM to define the Blinky class ================*/
 /*.$skip${QP_VERSION} vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv*/
 /*. Check for the minimum required QP version */
@@ -68,16 +67,6 @@ QState Blink_state_Led_Off(Blink * const me, QEvt const * const e) {
         case Q_ENTRY_SIG: {
             // Led_Off
             qp_blink_turn_off();
-
-                #ifdef Q_SPY
-                    // USART1_SendChar (0x4c);
-                    // QS_BEGIN_ID( Blynk_STAT, AO_Blink) /* application-specific record begin */
-                    // QS_U8(1, e->sig);  /* application-specific data element (Philo number) */
-                    // QS_STR(1); /* application-specific data element (Philo status) */
-                    // QS_U32(0, 100);
-                    // QS_END()          /* application-specific record end */
-                #endif
-            
             status_ = Q_HANDLED();
             break;
         }
@@ -101,7 +90,7 @@ QState Blink_state_Led_On(Blink * const me, QEvt const * const e) {
         case Q_ENTRY_SIG: {
             // Led_On
             qp_blink_turn_on();
-                //USART1_SendChar (0x48);
+            //USART1_SendChar (0x48);
             status_ = Q_HANDLED();
             break;
         }

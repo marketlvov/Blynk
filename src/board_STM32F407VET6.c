@@ -13,10 +13,24 @@
 /* GPIO function implementation */ 
 void qp_blink_turn_on(void) {
     GPIOA->BSRR = GPIO_BSRR_BR_6;     // on  GPIOA pin6  D2 (gnd to port)
+
+    QS_BEGIN_ID(Blink_STAT, 1U) /* application-specific record begin */
+    QS_STR("Led_on ");
+    QS_FUN(&qp_blink_turn_on);  /* function called */
+    QS_U8(1,1);                 /* application-specific data element */
+    QS_STR(" : \n ");
+    QS_END()                    /* application-specific record end */
 }
 
 void qp_blink_turn_off(void) {
     GPIOA->BSRR = GPIO_ODR_ODR_6;    // on  GPIOA pin6  D2 +U to port)
+
+    QS_BEGIN_ID(Blink_STAT, 1U) /* application-specific record begin */
+    QS_STR("Led_off ");
+    QS_FUN(&qp_blink_turn_off); /* function called */
+    QS_U8(1,0);                 /* application-specific data element */
+    QS_STR(" : \n ");
+    QS_END()                    /* application-specific record end */
 }
 
 void control_led_on(void) {
@@ -26,7 +40,6 @@ void control_led_on(void) {
 void control_led_off(void) {
     GPIOA->BSRR = GPIO_ODR_ODR_7;    // on  GPIOA pin6  D2 (+U to port)
 }
-
 
 
 /**
@@ -109,7 +122,6 @@ void board_init(void){
 }
 
 
-
 // board_STM32F407VET6 SYS TICK INITIALIZE
 void SysTick_init_Start(void){
 
@@ -127,10 +139,8 @@ void SysTick_init_Start(void){
     * DO NOT LEAVE THE ISR PRIORITIES AT THE DEFAULT VALUE!
     */
     NVIC_SetPriority(SysTick_IRQn, QF_AWARE_ISR_CMSIS_PRI);
-
     __enable_irq();  // enable interapt
 }
-
 
 
 #ifdef Q_SPY
@@ -169,15 +179,7 @@ void USART1_init_Start(void){
         USART1->CR1 |= USART_CR1_RXNEIE; // Enable Interapt for rx 
         NVIC_EnableIRQ (USART1_IRQn) ;   //on Interapt for USART1
         __enable_irq();                  // enable interapt
-        
-        QS_OBJ_DICTIONARY(&l_SysTick);
-        QS_USR_DICTIONARY(Blink_STAT);
-        QS_USR_DICTIONARY(COMMAND_STAT);
 
-        /* setup the QS filters... */
-        QS_GLB_FILTER(QS_SM_RECORDS); /* state machine records */
-        QS_GLB_FILTER(QS_AO_RECORDS); /* active object records */
-        QS_GLB_FILTER(QS_UA_RECORDS); /* all user records */
     }
 
     void USART1_IRQHandler (void) {
@@ -193,12 +195,14 @@ void USART1_init_Start(void){
 
 void SysTick_Handler(void) {
     QXK_ISR_ENTRY();   /* inform QXK about entering an ISR */
-    #ifdef Q_SPY
+
+#ifdef Q_SPY
     {
         uint32_t tmp = SysTick->CTRL; /* clear SysTick_CTRL_COUNTFLAG */
         QS_tickTime_ += QS_tickPeriod_; /* account for the clock rollover */
     }
-    #endif /* Q_SPY */
+#endif /* Q_SPY */
+
     QF_onClockTick();
     QXK_ISR_EXIT();  /* inform QXK about exiting an ISR */
 }

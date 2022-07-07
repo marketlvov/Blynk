@@ -5,12 +5,12 @@
 *****************************************************************************/
 #include <stdio.h>  /* for printf()/fprintf() */
 #include <stdlib.h> /* for exit() */
+
 #include "board_STM32F407VET6.h"
 #include "blink.h"
 
 #include "stdint.h"
 #include "stm32f4xx.h"
-
 
 
 #ifdef Q_SPY
@@ -21,14 +21,14 @@
     uint8_t usart_tx_data;
     uint8_t usart_rx_data;
 
-        // UART1 Send -> uint8_t  
+    // UART1 Send -> uint8_t  
     void USART1_SendChar (uint8_t usart_c){
-        USART1->DR = usart_c;              // LOad the Data for RX
-        while ( !(USART1->SR & USART_SR_TC) ){} //wait end of transmit sesion
-        USART1->SR = ~USART_SR_TC;            // Clear flag USART_SR_TC end transmitt
+        USART1->DR = usart_c;                   // Load the Data for RX
+        while ( !(USART1->SR & USART_SR_TC) ){} // Wait end of transmit sesion
+        USART1->SR = ~USART_SR_TC;              // Clear flag USART_SR_TC end transmitt
     }
 
-        // UART1 Receive -> uint8_t
+    // UART1 Receive -> uint8_t
     uint8_t USART1_GetChar (void){
     //while ( !(USART1->SR & (1<<5)) ){} //wait RXNE bit to set
     if (USART1->SR & (1<<5)) {
@@ -54,18 +54,44 @@ int main() {
     static QEvt const *blink_queueSto[10]; /* Event queue storage for Blink */
 
     board_init();
-    
-    
-    
-    #ifdef Q_SPY
+
+#ifdef Q_SPY
     QS_INIT(&QSUart); //QS_onStartup(void const *arg)
 
+    /* initialize Dictionary */
     /* object dictionaries... */
-    //QS_OBJ_DICTIONARY(AO_Blink);
-     
+    QS_OBJ_DICTIONARY(AO_Blink);
+    QS_OBJ_DICTIONARY(&l_SysTick); /* event-source identifiers used for tracing */
+
     /* global signals */
-    // QS_SIG_DICTIONARY(_SIG,      (void *)0); 
-    #endif /* Q_SPY */
+    QS_SIG_DICTIONARY(TIMEOUT_SIG,(void *)0);
+    QS_SIG_DICTIONARY(Q_ENTRY_SIG,(void *)0);
+
+    /* functions dictionaries... */
+    QS_FUN_DICTIONARY(&control_led_on);
+    QS_FUN_DICTIONARY(&control_led_off);
+    QS_FUN_DICTIONARY(&qp_blink_turn_off);
+    QS_FUN_DICTIONARY(&qp_blink_turn_on);
+
+    //States
+    QS_FUN_DICTIONARY(&Blink_initial);
+    QS_FUN_DICTIONARY(&Blink_state_Led_Off);
+    QS_FUN_DICTIONARY(&Blink_state_Led_On);
+    
+    QS_USR_DICTIONARY(Blink_STAT);
+    QS_USR_DICTIONARY(COMMAND_STAT);
+
+        /* setup the QS filters... */
+        QS_GLB_FILTER(QS_SM_RECORDS); /* state machine records */
+        QS_GLB_FILTER(QS_AO_RECORDS); /* active object records */
+        QS_GLB_FILTER(QS_UA_RECORDS); /* all user records */
+
+        // QS_GLB_FILTER(Blink_STAT);
+        // QS_LOC_FILTER(AO_Blink); 
+        
+
+        
+#endif /* Q_SPY */
 
 
 
@@ -79,7 +105,7 @@ int main() {
                   blink_queueSto, Q_DIM(blink_queueSto),
                   (void *)0, 0U, /* no stack */
                   (QEvt *)0);    /* no initialization event */
-    //USART1_SendChar (0x23);
+    //USART1_SendChar (0x23); //test signal
     return QF_run(); /* let the framework run the application */
 }
 
@@ -93,6 +119,7 @@ void QF_onCleanup(void) {
 
 void QF_onStartup(void) {
     SysTick_init_Start();
+    QS_GLB_FILTER(QS_UA_RECORDS);
 }
 
 
@@ -102,6 +129,7 @@ void QXK_onIdle(void) {
 
     
 #ifdef Q_SPY
+    
     QS_rxParse();  /* parse all the received bytes */
 
     // transmit QS Packet
@@ -190,23 +218,30 @@ void Q_onAssert(char const * const module, int loc) {
         //(void)param1;
         //(void)param2;
         //(void)param3;
-        
-        QS_BEGIN_ID(COMMAND_STAT, 0U) /* app-specific record */
-            QS_U8(2, cmdId);
-            QS_U32(8, param1);
-            QS_U32(8, param2);
-            QS_U32(8, param3);
-        QS_END()
-        
         switch (cmdId) {
             case  0:
                 control_led_on();
+
+                QS_BEGIN_ID(COMMAND_STAT, 1U) /* app-specific record */
+                QS_STR("Command 0 - Control Led On:");
+                QS_U8 (2, cmdId);
+                QS_U32(8, param1);
+                QS_U32(8, param2);
+                QS_U32(8, param3);
+                QS_END()
                 break;
 
             case  1:
                 control_led_off();
-                break;
 
+                QS_BEGIN_ID(COMMAND_STAT, 1U) /* app-specific record */
+                QS_STR("Command 1 - Control Led Off:"); // 
+                QS_U8 (2, cmdId);  // uint8_t  (width , data)
+                QS_U32(8, param1); // uint32_t (width , data)
+                QS_U32(8, param2); 
+                QS_U32(8, param3); 
+                QS_END()
+                break;
             default: break;
         }
     }

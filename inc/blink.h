@@ -52,8 +52,6 @@ enum BlinkSignals {
 
 
 
-
-
 enum { BSP_TICKS_PER_SEC = 100 }; /* number of clock ticks in a second */
 
 
