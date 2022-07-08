@@ -12,33 +12,33 @@
 
 /* GPIO function implementation */ 
 void qp_blink_turn_on(void) {
-    GPIOA->BSRR = GPIO_BSRR_BR_6;     // on  GPIOA pin6  D2 (gnd to port)
+    GPIOA->BSRR = GPIO_BSRR_BR_6; // on  GPIOA pin6  D2 (gnd to port)
 
-    QS_BEGIN_ID(Blink_STAT, 1U) /* application-specific record begin */
+    QS_BEGIN_ID(Blink_STAT, 1U)   /* application-specific record begin */
     QS_STR("Led_on ");
-    QS_FUN(&qp_blink_turn_on);  /* function called */
-    QS_U8(1,1);                 /* application-specific data element */
+    QS_FUN(&qp_blink_turn_on);    /* function called */
+    QS_U8(1,1);                   /* application-specific data element */
     QS_STR(" : \n ");
-    QS_END()                    /* application-specific record end */
+    QS_END()                      /* application-specific record end */
 }
 
 void qp_blink_turn_off(void) {
-    GPIOA->BSRR = GPIO_ODR_ODR_6;    // on  GPIOA pin6  D2 +U to port)
+    GPIOA->BSRR = GPIO_ODR_ODR_6; // on  GPIOA pin6  D2 +U to port)
 
-    QS_BEGIN_ID(Blink_STAT, 1U) /* application-specific record begin */
+    QS_BEGIN_ID(Blink_STAT, 1U)   /* application-specific record begin */
     QS_STR("Led_off ");
-    QS_FUN(&qp_blink_turn_off); /* function called */
-    QS_U8(1,0);                 /* application-specific data element */
+    QS_FUN(&qp_blink_turn_off);   /* function called */
+    QS_U8(1,0);                   /* application-specific data element */
     QS_STR(" : \n ");
-    QS_END()                    /* application-specific record end */
+    QS_END()                      /* application-specific record end */
 }
 
 void control_led_on(void) {
-    GPIOA->BSRR = GPIO_BSRR_BR_7;    // on  GPIOA pin6  D2 (gnd to port)
+    GPIOA->BSRR = GPIO_BSRR_BR_7; // on  GPIOA pin6  D2 (gnd to port)
 }
 
 void control_led_off(void) {
-    GPIOA->BSRR = GPIO_ODR_ODR_7;    // on  GPIOA pin6  D2 (+U to port)
+    GPIOA->BSRR = GPIO_ODR_ODR_7; // on  GPIOA pin6  D2 (+U to port)
 }
 
 
@@ -75,11 +75,11 @@ CLOCK Setup For STM32F407VE
     #define PLL_P  0   // PLLP = 2   (00000000)
 
     // 1. ENABLE HSE and wait for the HSE to become Ready
-    RCC->CR |= RCC_CR_HSEON;  // HSEON bit 16=>1 on
-    while (!(RCC->CR & RCC_CR_HSERDY)); // wait 
+    RCC->CR |= RCC_CR_HSEON;              // HSEON bit 16=>1 on
+    while (!(RCC->CR & RCC_CR_HSERDY));   // wait 
 
     // 2. Set the POWER ENABLE CLOCK and VOLTAGE REGULATOR
-    RCC->APB1ENR |= RCC_APB1ENR_PWREN; // PWREN bit 28=> 1 Enable
+    RCC->APB1ENR |= RCC_APB1ENR_PWREN;    // PWREN bit 28=> 1 Enable
     RCC->APB2ENR |= RCC_APB2ENR_USART1EN; // USART1EN bit 4=> 1 Enable
     PWR->CR |= PWR_CR_VOS; // bit 14.15 (1.1)  Scale 1 mode (reset value)
 
@@ -88,17 +88,17 @@ CLOCK Setup For STM32F407VE
                  FLASH_ACR_PRFTEN   | FLASH_ACR_LATENCY_5WS;
 
     // 4. Configure the PRESCALARS HCLK, PCLK1, PCLK2
-    RCC->CFGR |= RCC_CFGR_HPRE_DIV1;  // AHB Prescale /1
-    RCC->CFGR |= RCC_CFGR_PPRE1_DIV4; // APB1 Prescale /4
-    RCC->CFGR |= RCC_CFGR_PPRE2_DIV2; // APB2 Prescale /2
+    RCC->CFGR |= RCC_CFGR_HPRE_DIV1;      // AHB Prescale /1
+    RCC->CFGR |= RCC_CFGR_PPRE1_DIV4;     // APB1 Prescale /4
+    RCC->CFGR |= RCC_CFGR_PPRE2_DIV2;     // APB2 Prescale /2
 
     // 5. Configure the MAIN PLL PLLM=4 PLLN=168 /p2 /q4
     RCC->PLLCFGR = (PLL_M <<0)  | (PLL_N << 6) | 
                    (PLL_P <<16) | (RCC_PLLCFGR_PLLSRC_HSE);
 
     // 6. Enable the PLL and wait for it to become ready
-    RCC->CR |= RCC_CR_PLLON; // PLLRDY bit24  => 1 pll on 
-    while (!(RCC->CR & RCC_CR_PLLRDY)); //wait
+    RCC->CR |= RCC_CR_PLLON;              // PLLRDY bit24  => 1 pll on 
+    while (!(RCC->CR & RCC_CR_PLLRDY));   //wait
 
     // 7. Select the Clock Source and wait for it to be set
     RCC->CFGR |= RCC_CFGR_SW_PLL;
@@ -117,8 +117,8 @@ void board_init(void){
     GPIOA->OSPEEDR = 0x0;                 // GPIOA low speed to all port
     
     // Initial LED state
-    qp_blink_turn_off(); // off GPIOA pin6  D2
-    control_led_off();   // off GPIOA pin7  D3
+    qp_blink_turn_off();                  // off GPIOA pin6  D2
+    control_led_off();                    // off GPIOA pin7  D3
 }
 
 
@@ -139,14 +139,13 @@ void SysTick_init_Start(void){
     * DO NOT LEAVE THE ISR PRIORITIES AT THE DEFAULT VALUE!
     */
     NVIC_SetPriority(SysTick_IRQn, QF_AWARE_ISR_CMSIS_PRI);
-    __enable_irq();  // enable interapt
+    __enable_irq();                        // enable interapt
 }
 
 
 #ifdef Q_SPY
 // USART1 initialization
 void USART1_init_Start(void){
-
         // Pin configuration
         RCC->AHB1ENR  |=  RCC_AHB1ENR_GPIOAEN; // Enable GPIOA CLOCK
 
@@ -158,7 +157,7 @@ void USART1_init_Start(void){
         GPIOA->AFR[1] |= (7<<4); // Bites (7:6:5:4)   = 0:1:1:1 --> AF7 Alternate function for USART1 at Pin PA9
         GPIOA->AFR[1] |= (7<<8); // Bites (11:10:9:8) = 0:1:1:1 --> AF7 Alternate function for USART1 at Pin PA10
 
-            // UART Configuration
+        // UART Configuration
         USART1->CR1 = 0x00;          // Clear ALL
         USART1->CR1 |= USART_CR1_UE; // UE = 1... Enable USART
         USART1->CR1 &= ~(1<<12);     // M =0 ==> 8 bit word length   USART_CR1_M
@@ -171,15 +170,12 @@ void USART1_init_Start(void){
             // 8*2*9600    =   153600
             // 
             // 16*0.875 = 14  ==>  14 mantisa
-            
-                    
         USART1->CR1 |= USART_CR1_RE; // RE=1.. Enable the Receiver
         USART1->CR1 |= USART_CR1_TE; // TE=1.. Enable Transmitter
 
         USART1->CR1 |= USART_CR1_RXNEIE; // Enable Interapt for rx 
         NVIC_EnableIRQ (USART1_IRQn) ;   //on Interapt for USART1
         __enable_irq();                  // enable interapt
-
     }
 
     void USART1_IRQHandler (void) {
@@ -189,9 +185,7 @@ void USART1_init_Start(void){
         //}
     }
 #endif /* Q_SPY */
-    
-    
-    
+
 
 void SysTick_Handler(void) {
     QXK_ISR_ENTRY();   /* inform QXK about entering an ISR */

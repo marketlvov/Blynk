@@ -22,8 +22,7 @@
 
 #include "blink.h"
 
-
-//Q_DEFINE_THIS_FILE
+// Q_DEFINE_THIS_FILE
 
 void QF_onClockTick(void) {
     QXK_ISR_ENTRY();   /* inform QXK about entering an ISR */

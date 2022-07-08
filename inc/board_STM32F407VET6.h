@@ -1,4 +1,4 @@
-// for blimk ver_1
+// for blink ver_1
 // board_STM32F407VET6
 
 #ifndef BOARD_STM32F407VET6
@@ -16,8 +16,8 @@ void control_led_on (void);
 void control_led_off(void);
 
 #ifdef Q_SPY
-    void USART1_init_Start (void);
-    void USART1_IRQHandler (void);
+void USART1_init_Start (void);
+void USART1_IRQHandler (void);
 #endif /* Q_SPY */
 
 #endif /*BOARD_STM32F407VET6 */

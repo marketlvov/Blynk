@@ -109,6 +109,20 @@ enum BlinkSignals {
     MAX_SIG /* keep last (the number of signals) */
 };
 
+#ifdef Q_SPY
+    static QSTimeCtr QS_tickTime_;
+    static QSTimeCtr QS_tickPeriod_;
+
+    /* event-source identifiers used for tracing */
+    static uint8_t const l_SysTick;
+
+    enum AppRecords { /* application-specific trace records */
+        Blink_STAT = QS_USER,
+        COMMAND_STAT
+    };
+#endif /* Q_SPY */
+
+
 
 enum { BSP_TICKS_PER_SEC = 100 }; /* number of clock ticks in a second */
 
@@ -119,7 +133,6 @@ extern QActive * const AO_Blink; /* opaque pointer to the Blinky AO */
 
 
 void QF_onClockTick(void);
-
 
 extern void qp_blink_turn_off(void); // Led_Off
 extern void qp_blink_turn_on(void);  // Led_On
